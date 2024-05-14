@@ -1,2 +1,2 @@
 A really shit calculator
-nobody should even look a this
+nobody should even look at this code ever
