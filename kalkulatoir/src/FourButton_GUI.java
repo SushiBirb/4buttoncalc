@@ -132,17 +132,48 @@ public class FourButton_GUI {
         bDiv.addActionListener(e -> tf.setText(tf.getText() + " / "));
 
         bClear.addActionListener(e -> tf.setText(""));
-
-        del.addActionListener(e -> tf.setText(tf.getText().substring(0, tf.getText().length() - 1)));
+        try{
+            if(!tf.getText().isEmpty()) {
+                del.addActionListener(e -> tf.setText(tf.getText().substring(0, tf.getText().length() - 1)));
+            }
+        }catch(Exception e){
+            tf.setText("");
+        }
 
         //parse text from field
         beq.addActionListener(e -> {
             String text = tf.getText();
+            if(text.isEmpty()){
+                JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
+                tf.setText("");
+                return;
+            }
+
+            if(text.equals(".")){
+                JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
+                tf.setText("");
+                return;
+            }
             String[] splitequation = text.split(" ");
+
             if (splitequation[1].equals("-")) {
                 splitequation[0] = "0";
             }
+
             ArrayList < String > equation = new ArrayList < > (Arrays.asList(splitequation));
+            try {
+                if (equation.size() <= 1) {
+                    JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
+                    tf.setText("");
+                    equation.clear();
+                }
+            }catch (Exception p) {
+                JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
+                tf.setText("");
+                equation.clear();
+            }
+
+
             for (int c = 0; c < equation.size(); c++) {
                 if (equation.get(c).isEmpty()) {
                     equation.remove(c);
