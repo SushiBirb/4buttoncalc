@@ -146,6 +146,7 @@ public class FourButton_GUI {
             for (int c = 0; c < equation.size(); c++) {
                 if (equation.get(c).isEmpty()) {
                     equation.remove(c);
+                    c--;
                 }
             }
 
