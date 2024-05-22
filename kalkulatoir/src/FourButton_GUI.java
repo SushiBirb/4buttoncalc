@@ -132,33 +132,36 @@ public class FourButton_GUI {
         bDiv.addActionListener(e -> tf.setText(tf.getText() + " / "));
 
         bClear.addActionListener(e -> tf.setText(""));
-        try{
-            if(!tf.getText().isEmpty()) {
-                del.addActionListener(e -> tf.setText(tf.getText().substring(0, tf.getText().length() - 1)));
+
+        //checks to not go out of bound when using del button
+        del.addActionListener(e -> {
+            String text = tf.getText();
+            if (text.length() > 0) {
+                text = text.substring(0, text.length() - 1);
+                tf.setText(text);
             }
-        }catch(Exception e){
-            tf.setText("");
-        }
+        });
 
         //parse text from field
         beq.addActionListener(e -> {
             String text = tf.getText();
-            if(text.isEmpty()){
+            if (text.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
                 tf.setText("");
                 return;
             }
 
-            if(text.equals(".")){
+            if (text.equals(".")) {
                 JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
                 tf.setText("");
                 return;
             }
             String[] splitequation = text.split(" ");
             try {
-            if (splitequation[1].equals("-")) {
-                splitequation[0] = "0";
-            }} catch (Exception p) {
+                if (splitequation[1].equals("-")) {
+                    splitequation[0] = "0";
+                }
+            } catch (Exception p) {
                 JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
                 tf.setText("");
                 return;
@@ -171,12 +174,11 @@ public class FourButton_GUI {
                     tf.setText("");
                     equation.clear();
                 }
-            }catch (Exception p) {
+            } catch (Exception p) {
                 JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
                 tf.setText("");
                 equation.clear();
             }
-
 
             for (int c = 0; c < equation.size(); c++) {
                 if (equation.get(c).isEmpty()) {
@@ -250,7 +252,7 @@ public class FourButton_GUI {
                     i = 0;
                 }
                 if (equation.get(i).equals("/")) {
-                    if (Double.parseDouble(equation.get(i - 1)) == 0 && Double.parseDouble(equation.get(i + 1)) == 0) {
+                    if (Double.parseDouble(equation.get(i - 1)) == 0 && Double.parseDouble(equation.get(i + 1)) == 0 || Double.parseDouble(equation.get(i + 1)) == 0) {
                         JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     result = Double.parseDouble(equation.get(i - 1)) / Double.parseDouble(equation.get(i + 1));
