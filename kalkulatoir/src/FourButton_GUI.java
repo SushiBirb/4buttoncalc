@@ -155,9 +155,13 @@ public class FourButton_GUI {
                 return;
             }
             String[] splitequation = text.split(" ");
-
+            try {
             if (splitequation[1].equals("-")) {
                 splitequation[0] = "0";
+            }} catch (Exception p) {
+                JOptionPane.showMessageDialog(frame, "Not an equation", "Error", JOptionPane.ERROR_MESSAGE);
+                tf.setText("");
+                return;
             }
 
             ArrayList < String > equation = new ArrayList < > (Arrays.asList(splitequation));
@@ -198,7 +202,7 @@ public class FourButton_GUI {
                 }
 
                 try {
-                    if (equation.get(i).matches("[+\\-\\*\\/]") && equation.get(i + 1).matches("[+\\-\\*\\/]")) {
+                    if (equation.get(i).matches("[+\\-\\*\\/.]") && equation.get(i + 1).matches("[+\\-\\*\\/.]")) {
                         JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
                         tf.setText("");
                         equation.clear();
@@ -212,7 +216,7 @@ public class FourButton_GUI {
                     break;
                 }
 
-                if (equation.get(i).matches("[+\\-\\*\\/]") && equation.get(i + 1).matches("[+\\-\\*\\/\\.]")) {
+                if (equation.get(i).matches("[+\\-*/\\\\.]") && equation.get(i + 1).matches("[+\\-*/\\\\.]")) {
                     JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
                     tf.setText("");
                     equation.clear();
