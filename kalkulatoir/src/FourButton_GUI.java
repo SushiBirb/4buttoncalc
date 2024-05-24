@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.*;
 
 public class FourButton_GUI {
 
     private double result;
 
     public FourButton_GUI() {
-        JFrame frame = new JFrame("Four Button GUI");
+        JFrame frame = new JFrame("Just two more git commits");
+        Pattern pattern = Pattern.compile(".*\\..*\\..*");
 
         //text field
         JTextField tf = new JTextField(0);
@@ -136,7 +138,7 @@ public class FourButton_GUI {
         //checks to not go out of bound when using del button
         del.addActionListener(e -> {
             String text = tf.getText();
-            if (text.length() > 0) {
+            if (!text.isEmpty()) {
                 text = text.substring(0, text.length() - 1);
                 tf.setText(text);
             }
@@ -184,11 +186,46 @@ public class FourButton_GUI {
                 if (equation.get(c).isEmpty()) {
                     equation.remove(c);
                     c--;
+
                 }
+                Matcher matcher = pattern.matcher(equation.get(c));
+                if(matcher.matches()) {
+                    JOptionPane.showMessageDialog(frame, "nested decimals", "Error", JOptionPane.ERROR_MESSAGE);
+                    tf.setText("");
+                    equation.clear();
+                    break;
+                }
+
             }
 
             //check for 2 operators in a row
             for (int i = 0; i < equation.size(); i++) {
+                try {
+                    if (equation.get(0).equals("[+\\-\\*\\/.]")) {
+                        equation.set(0, equation.get(i+1));
+                        equation.remove(i);
+                    }
+                } catch (Exception p) {
+                    JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                    tf.setText("");
+                    equation.clear();
+                    break;
+                }
+
+
+                try {
+                    if (equation.get(i).equals("*") && equation.get(i + 1).equals("-")) {
+                        double blah = Double.parseDouble(equation.get(i + 2)) * (-1);
+                        String blagh = String.valueOf(blah);
+                        equation.remove(i + 1);
+                        equation.set(i + 1, blagh);
+                    }
+                } catch (Exception p) {
+                    JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                    tf.setText("");
+                    equation.clear();
+                    break;
+                }
                 try {
                     if (equation.get(i).equals("/") && equation.get(i + 1).equals("-")) {
                         double blah = Double.parseDouble(equation.get(i + 2)) * (-1);
@@ -225,10 +262,16 @@ public class FourButton_GUI {
                     break;
                 }
 
-        /* loop through whole arraylist
-        if operator is found, do the operation and remove the operator and the two indexes around it */
+    	/* loop through whole arraylist
+    	if operator is found, do the operation and remove the operator and the two indexes around it */
 
                 if (equation.get(i).equals("+")) {
+                    if(i-1 < 0) {
+                        JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                        tf.setText("");
+                        equation.clear();
+                        break;
+                    }
                     result = Double.parseDouble(equation.get(i - 1)) + Double.parseDouble(equation.get(i + 1));
                     equation.set(i, String.valueOf(result));
                     equation.remove(i - 1);
@@ -245,6 +288,12 @@ public class FourButton_GUI {
                     i = 0;
                 }
                 if (equation.get(i).equals("*")) {
+                    if(i-1 < 0) {
+                        JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                        tf.setText("");
+                        equation.clear();
+                        break;
+                    }
                     result = Double.parseDouble(equation.get(i - 1)) * Double.parseDouble(equation.get(i + 1));
                     equation.set(i, String.valueOf(result));
                     equation.remove(i - 1);
@@ -252,8 +301,15 @@ public class FourButton_GUI {
                     i = 0;
                 }
                 if (equation.get(i).equals("/")) {
+                    if(i-1 < 0) {
+                        JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                        tf.setText("");
+                        equation.clear();
+                        break;
+                    }
                     if (Double.parseDouble(equation.get(i - 1)) == 0 && Double.parseDouble(equation.get(i + 1)) == 0 || Double.parseDouble(equation.get(i + 1)) == 0) {
                         JOptionPane.showMessageDialog(frame, "invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
                     }
                     result = Double.parseDouble(equation.get(i - 1)) / Double.parseDouble(equation.get(i + 1));
                     equation.set(i, String.valueOf(result));
